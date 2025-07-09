@@ -18,11 +18,11 @@ def zoekfunctie(zoekterm):
     data = response.json()
 
     producten = data.get("products", [])
-    for product in producten[:1]:
+    for product in producten[:3]:
         naam = product.get("product_name")
-        merken = product.get("brands")
         macros = product.get("nutriments")
-        print(f"{naam}, ({merken})")
+        print("----------")
+        print(f"{naam}")
         print(f"Calorieën: {macros.get("energy-kcal_100g")} kcal per 100g")
         print(f"Eiwit: {macros.get("proteins_100g")}g")
         print(f"Koolhydraten {macros.get("carbohydrates_100g")}g")
