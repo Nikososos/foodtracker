@@ -13,6 +13,7 @@ def zoekfunctie(zoekterm):
         "search_simple": 1,
         "action": "process",
         "json": 1,
+        "countries": "Netherlands"
     }
     response = requests.get(url, params=params)
     data = response.json()
@@ -33,7 +34,13 @@ def zoekfunctie(zoekterm):
         vetten = macros.get("fat_100g")
         print(f"{x}. {naam}\n{calories} kcal per 100g\n{eiwit} eiwit per 100g\n{koolhydraten} koolhydraten per 100g\n{vetten} vetten per 100g\n-----")
         
-zoekfunctie("kipfilet")
+zoekfunctie("eieren")
+
+#probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat
+
+# functie 2 Opslaan van dagelijkse voeding in een lokaal bestaand
+# bijhouden wat je vandaag en op eerdere dagen heb gegeten
+# Dit ga ik bouwen in de zoekfunctie zodat er direct opgeslagen kan worden
 
 # functie 2 dagelijkse totaalwaarden berekenen
 # Voeg meerdere maaltijden toe en houd dagtotaal bij
