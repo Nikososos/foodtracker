@@ -31,13 +31,8 @@ def zoekfunctie(zoekterm):
         eiwit = macros.get("proteins_100g")
         koolhydraten = macros.get("carbohydrates_100g")
         vetten = macros.get("fat_100g")
-        print("----------")
-        print(f"{naam}")
-        print(f"Calorieën: {macros.get("energy-kcal_100g")} kcal per 100g")
-        print(f"Eiwit: {macros.get("proteins_100g")}g")
-        print(f"Koolhydraten {macros.get("carbohydrates_100g")}g")
-        print(f"Vetten: {macros.get("fat_100g")}g")
-
+        print(f"{x}. {naam}\n{calories} kcal per 100g\n{eiwit} eiwit per 100g\n{koolhydraten} koolhydraten per 100g\n{vetten} vetten per 100g\n-----")
+        
 zoekfunctie("kipfilet")
 
 # functie 2 dagelijkse totaalwaarden berekenen
