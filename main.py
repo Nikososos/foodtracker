@@ -6,7 +6,10 @@ import requests
 # Gebruiker typt in bijvoorbeeld kipfilet of banaan
 # Gebruiker krijgt voedingswaarden terug per 100g opgedeeld in KCAL, EIWITTEN, VETTEN EN KOOLHYDRATEN
 
+opgeslagen_voeding = []
+
 def zoekfunctie(zoekterm):
+    #probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat, countries param lost dit op
     url = f"https://world.openfoodfacts.org/cgi/search.pl"
     params = {
         "search_terms": zoekterm,
@@ -33,10 +36,18 @@ def zoekfunctie(zoekterm):
         koolhydraten = macros.get("carbohydrates_100g")
         vetten = macros.get("fat_100g")
         print(f"{x}. {naam}\n{calories} kcal per 100g\n{eiwit} eiwit per 100g\n{koolhydraten} koolhydraten per 100g\n{vetten} vetten per 100g\n-----")
+    
+    keuze = input("Kies een nummer om op te slaan (of druk op enter om te annuleren): ")
+    if keuze <= 3:
+        gekozen = keuzes[int]
+        try:
+            gram = float(input("Hoeveel gram heb je gegeten?: "))
+        except ValueError:
+            print("Ongeldige invoer")
+            return
+
         
 zoekfunctie("eieren")
-
-#probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat
 
 # functie 2 Opslaan van dagelijkse voeding in een lokaal bestaand
 # bijhouden wat je vandaag en op eerdere dagen heb gegeten
