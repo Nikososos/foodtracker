@@ -16,11 +16,21 @@ def zoekfunctie(zoekterm):
     }
     response = requests.get(url, params=params)
     data = response.json()
-
     producten = data.get("products", [])
-    for product in producten[:3]:
+
+    if not producten:
+        print("Resultaat niet gevonden")
+        return
+
+    print("Resultaten!")
+    keuzes = []
+    for x, product in enumerate(producten[:3], start=1):
         naam = product.get("product_name")
         macros = product.get("nutriments")
+        calories = macros.get("energy-kcal_100g")
+        eiwit = macros.get("proteins_100g")
+        koolhydraten = macros.get("carbohydrates_100g")
+        vetten = macros.get("fat_100g")
         print("----------")
         print(f"{naam}")
         print(f"Calorieën: {macros.get("energy-kcal_100g")} kcal per 100g")
