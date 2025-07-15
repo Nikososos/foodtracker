@@ -65,7 +65,9 @@ def zoekfunctie(zoekterm):
         })
 
     
+   
     keuze = input("Kies een nummer om op te slaan (of druk op enter om te annuleren): ")
+    # Hier zit een probleem dat nog gefixed moet worden
     if keuze <= 3:
         gekozen = keuzes[int]
         try:
