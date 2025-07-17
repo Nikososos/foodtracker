@@ -22,10 +22,12 @@ import requests
 
 # Daarnaast moet er ook een command line menu komen om de functies aan te roepen en terug te keren naar het menu!
 
-# Wellicht leuke functionaliteit bij het opstarten van de app een 
+# Wellicht leuke functionaliteit bij het opstarten van de app een
 
+
+# Lege lijst voor het opslaan van voeding buiten de scope van de functie
 opgeslagen_voeding = []
-
+# Zoeken en opslaan
 def zoekfunctie(zoekterm):
     #probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat, countries param lost dit op
     url = f"https://world.openfoodfacts.org/cgi/search.pl"
@@ -67,7 +69,6 @@ def zoekfunctie(zoekterm):
     
     # Keuze van gebruiker krijgen om op te slaan 
     keuze = input("Kies een nummer om op te slaan (of druk op enter om te annuleren): ")
-    # Hier zit een probleem dat nog gefixed moet worden
     if keuze.isdigit() and 1 <= int(keuze) <= len(keuzes):
         gekozen = keuzes[int(keuze)-1]
         try:
@@ -91,11 +92,29 @@ def zoekfunctie(zoekterm):
     else:
         print("Geen selectie opgeslagen")
 
+
+# Dagoverzicht functie 
 def toon_dagoverzicht():
     print("\nDagoverzicht: ")
+    totaal_kcal = 0
+    totaal_eiwit = 0
+    totaal_kh = 0
+    totaal_vet = 0
 
+    for item in opgeslagen_voeding:
+        print(f"{item["naam"]} ({item["gram"]}g): {item["kcal"]}kcal, {item["eiwit"]}g eiwit, {item["kh"]}g koolhydraten, {item["vet"]}g vet")
+        # Het optellen van het aantal nutrients aan dagoverzicht
+        totaal_kcal += item["kcal"]
+        totaal_eiwit += item["eiwit"]
+        totaal_kh += item["kh"]
+        totaal_vet += item["vet"]
+
+    print(f"\nTotaal: {round(totaal_kcal,1)} kcal |  {round(totaal_eiwit,1)}g eiwit | {round(totaal_kh,1)}g kh |  {round(totaal_vet,1)}g vet\n")
+
+
+#Hoofdmenu
 while True:
-    keuze = int(input("\n Kies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
+    keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
     if keuze == 1:
         zoekterm = input("Voer een productnaam in: ")
         zoekfunctie(zoekterm)
