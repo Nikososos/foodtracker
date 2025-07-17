@@ -114,15 +114,19 @@ def toon_dagoverzicht():
 
 #Hoofdmenu
 while True:
-    keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
-    if keuze == 1:
-        zoekterm = input("Voer een productnaam in: ")
-        zoekfunctie(zoekterm)
-    elif keuze ==2:
-        toon_dagoverzicht()
-    elif keuze == 3:
-        print("Tot de volgende keer!")
-        break
-    else:
-        print("voer een geldige keuze in")
+    try:
+        keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
+        if keuze == 1:
+            zoekterm = input("Voer een productnaam in: ")
+            zoekfunctie(zoekterm)
+        elif keuze ==2:
+            toon_dagoverzicht()
+        elif keuze == 3:
+            print("Tot de volgende keer!")
+            break
+        else:
+            print("\nvoer een geldige keuze in")
+    except ValueError:
+        print("--------------------")
+        print("Gebruik een cijfer!!!")
     
