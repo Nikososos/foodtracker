@@ -65,11 +65,11 @@ def zoekfunctie(zoekterm):
         })
 
     
-   
+    # Keuze van gebruiker krijgen om op te slaan 
     keuze = input("Kies een nummer om op te slaan (of druk op enter om te annuleren): ")
     # Hier zit een probleem dat nog gefixed moet worden
-    if keuze <= 3:
-        gekozen = keuzes[int]
+    if keuze.isdigit() and 1 <= int(keuze) <= len(keuzes):
+        gekozen = keuzes[int(keuze)-1]
         try:
             gram = float(input("Hoeveel gram heb je gegeten?: "))
         except ValueError:
@@ -81,7 +81,7 @@ def zoekfunctie(zoekterm):
         factor = gram / 100
         opgeslagen_voeding.append({
             "naam": gekozen["naam"],
-            "gram": gekozen["gram"],
+            "gram": gram,
             "kcal": round(gekozen["kcal_per_100g"] * factor, 1),
             "eiwit": round(gekozen["eiwit_per_100g"] * factor, 1),
             "kh": round(gekozen["kh_per_100g"] * factor, 1),
@@ -91,14 +91,11 @@ def zoekfunctie(zoekterm):
     else:
         print("Geen selectie opgeslagen")
 
-        
-zoekfunctie("eieren")
-
 def toon_dagoverzicht():
     print("\nDagoverzicht: ")
 
 while True:
-    keuze = input("\n Kies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n")
+    keuze = int(input("\n Kies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
     if keuze == 1:
         zoekterm = input("Voer een productnaam in: ")
         zoekfunctie(zoekterm)
