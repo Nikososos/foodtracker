@@ -108,7 +108,7 @@ def berekenen_beweging(kcal):
 #Hoofdmenu met ValueError
 while True:
     try:
-        keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
+        keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Bereken beweging voor vandaag\n4. Stop\n"))
         if keuze == 1:
             zoekterm = input("Voer een productnaam in: ")
             zoekfunctie(zoekterm)
