@@ -1,4 +1,7 @@
 import requests
+import os
+from dotenv import load_dotenv
+
 
 # App word opgebouwd in verschillende handige functies
 
@@ -127,6 +130,5 @@ while True:
         else:
             print("\nvoer een geldige keuze in")
     except ValueError:
-        print("--------------------")
-        print("Gebruik een cijfer!!!")
+        print("\nGebruik een cijfer!!!")
     
