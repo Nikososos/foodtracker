@@ -4,42 +4,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
-
-if not API_KEY:
-    print("api key niet gevonden")
-
-
-# App word opgebouwd in verschillende handige functies
-
-# functie 1 Maaltijd of ingredient opzoeken
-# Gebruiker typt in bijvoorbeeld kipfilet of banaan
-# Gebruiker krijgt voedingswaarden terug per 100g opgedeeld in KCAL, EIWITTEN, VETTEN EN KOOLHYDRATEN
-
-# functie 2 Opslaan van dagelijkse voeding in een lokaal bestaand
-# bijhouden wat je vandaag en op eerdere dagen heb gegeten
-# Dit ga ik bouwen in de zoekfunctie zodat er direct opgeslagen kan worden
-
-# functie 2 dagelijkse totaalwaarden berekenen
-# Voeg meerdere maaltijden toe en houd dagtotaal bij
-# Wederom opgedeeld in KCAL, EIWITTEN, VETTEN EN KOOLHYDRATEN
-
-# functie 3 Opslaan van dagelijkse voeding in een lokaal bestaand
-# bijhouden wat je vandaag en op eerdere dagen heb gegeten
-
-# functie 4 persoonlijke macrodoelen instellen
-# De app vergelijkt je huidige dagtotaal en berekend hoeveel je nog moet eten
-
-# Daarnaast moet er ook een command line menu komen om de functies aan te roepen en terug te keren naar het menu!
-
-# Wellicht leuke functionaliteit bij het opstarten van de app een
-
+base_url = "https://api.api-ninjas.com/v1/exercises"
 
 # Lege lijst voor het opslaan van voeding buiten de scope van de functie
 opgeslagen_voeding = []
 # Zoeken en opslaan
 def zoekfunctie(zoekterm):
     #probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat, countries param lost dit op
-    url = f"https://world.openfoodfacts.org/cgi/search.pl"
+    url = "https://world.openfoodfacts.org/cgi/search.pl"
     params = {
         "search_terms": zoekterm,
         "search_simple": 1,
@@ -61,15 +33,15 @@ def zoekfunctie(zoekterm):
         naam = product.get("product_name")
         macros = product.get("nutriments")
 
-        calories = float(macros.get("energy-kcal_100g"))
+        kcal = float(macros.get("energy-kcal_100g"))
         eiwit = float(macros.get("proteins_100g"))
         koolhydraten = float(macros.get("carbohydrates_100g"))
         vetten = float(macros.get("fat_100g"))
-        print(f"{x}. {naam}\n{calories} kcal per 100g\n{eiwit} eiwit per 100g\n{koolhydraten} koolhydraten per 100g\n{vetten} vetten per 100g\n-----")
+        print(f"{x}. {naam}\n{kcal} kcal per 100g\n{eiwit} eiwit per 100g\n{koolhydraten} koolhydraten per 100g\n{vetten} vetten per 100g\n-----")
 
         keuzes.append({
             "naam": naam,
-            "kcal_per_100g": calories,
+            "kcal_per_100g": kcal,
             "eiwit_per_100g": eiwit,
             "kh_per_100g": koolhydraten,
             "vet_per_100g": vetten,
@@ -120,8 +92,20 @@ def toon_dagoverzicht():
 
     print(f"\nTotaal: {round(totaal_kcal,1)} kcal |  {round(totaal_eiwit,1)}g eiwit | {round(totaal_kh,1)}g kh |  {round(totaal_vet,1)}g vet\n")
 
+#Berekenen hoeveelheid beweging functie
+def berekenen_beweging(kcal):
+    if kcal == 0:
+        print("Geen calorieën ingevoerd")
+        return
+    
+    try:
+        gewicht = float(input("Wat is je gewicht in kg?: "))
+    except ValueError:
+        print("Ongeldige invoer!!!")
+        return
 
-#Hoofdmenu
+
+#Hoofdmenu met ValueError
 while True:
     try:
         keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Stop\n"))
@@ -133,6 +117,9 @@ while True:
         elif keuze == 3:
             print("Tot de volgende keer!")
             break
+        elif keuze == 4:
+            totaal_kcal = toon_dagoverzicht()
+            berekenen_beweging(totaal_kcal)
         else:
             print("\nvoer een geldige keuze in")
     except ValueError:
