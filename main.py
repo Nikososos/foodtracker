@@ -115,11 +115,11 @@ while True:
         elif keuze ==2:
             toon_dagoverzicht()
         elif keuze == 3:
-            print("Tot de volgende keer!")
-            break
-        elif keuze == 4:
             totaal_kcal = toon_dagoverzicht()
             berekenen_beweging(totaal_kcal)
+        elif keuze == 4:
+            print("Tot de volgende keer!")
+            break
         else:
             print("\nvoer een geldige keuze in")
     except ValueError:
