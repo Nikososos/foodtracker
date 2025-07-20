@@ -10,7 +10,7 @@ base_url = "https://api.api-ninjas.com/v1/exercises"
 opgeslagen_voeding = []
 # Zoeken en opslaan
 def zoekfunctie(zoekterm):
-    #probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat, countries param lost dit op
+    # probleem met programma dat er soms ook franse en duitse producten doorheen komen op keywords als ei en patat, countries param lost dit op
     url = "https://world.openfoodfacts.org/cgi/search.pl"
     params = {
         "search_terms": zoekterm,
@@ -28,15 +28,16 @@ def zoekfunctie(zoekterm):
         return
 
     print("Resultaten!")
+    #Filteren van alleen de eerste 3 resultaten, anders laat api alle resultaten zien wat een enorme waslijst aan keuze geeft voor de gebruiker
     keuzes = []
     for x, product in enumerate(producten[:3], start=1):
         naam = product.get("product_name")
         macros = product.get("nutriments")
 
-        kcal = float(macros.get("energy-kcal_100g"))
-        eiwit = float(macros.get("proteins_100g"))
-        koolhydraten = float(macros.get("carbohydrates_100g"))
-        vetten = float(macros.get("fat_100g"))
+        kcal = float(macros.get("energy-kcal_100g", 0))
+        eiwit = float(macros.get("proteins_100g", 0))
+        koolhydraten = float(macros.get("carbohydrates_100g", 0))
+        vetten = float(macros.get("fat_100g", 0))
         print(f"{x}. {naam}\n{kcal} kcal per 100g\n{eiwit} eiwit per 100g\n{koolhydraten} koolhydraten per 100g\n{vetten} vetten per 100g\n-----")
 
         keuzes.append({
@@ -116,6 +117,12 @@ def berekenen_beweging(kcal):
     if response.status_code == 200:
         data = response.json
         print("API gevonden!!")
+        if data:
+            kcal_per_uur = data[0]["calories_per_hour"] * (gewicht * 70) # Ervan uitgaande dat de gemiddelde mens 70 kilo weegt om factor uit te rekenen
+            minuten = round((kcal / kcal_per_uur) * 60)
+            print(f"{activiteit.title()}: {minuten} minuten")
+        else:
+            print(f"Geen data voor {activiteit}")
     else:
         print("API fout", response.status_code)
 
