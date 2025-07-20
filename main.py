@@ -118,7 +118,7 @@ def berekenen_beweging(kcal):
         data = response.json
         print("API gevonden!!")
         if data:
-            kcal_per_uur = data[0]["calories_per_hour"] * (gewicht * 70) # Ervan uitgaande dat de gemiddelde mens 70 kilo weegt om factor uit te rekenen
+            kcal_per_uur = data[0]["calories_per_hour"] * (gewicht / 70) # Ervan uitgaande dat de gemiddelde mens 70 kilo weegt om factor uit te rekenen
             minuten = round((kcal / kcal_per_uur) * 60)
             print(f"{activiteit.title()}: {minuten} minuten")
         else:
