@@ -115,7 +115,7 @@ def berekenen_beweging(kcal):
         )
 
     if response.status_code == 200:
-        data = response.json
+        data = response.json()
         print("API gevonden!!")
         if data:
             kcal_per_uur = data[0]["calories_per_hour"] * (gewicht / 70) # Ervan uitgaande dat de gemiddelde mens 70 kilo weegt om factor uit te rekenen
