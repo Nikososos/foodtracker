@@ -90,7 +90,7 @@ def toon_dagoverzicht():
         totaal_kh += item["kh"]
         totaal_vet += item["vet"]
 
-    print(f"\nTotaal: {round(totaal_kcal,1)} kcal |  {round(totaal_eiwit,1)}g eiwit | {round(totaal_kh,1)}g kh |  {round(totaal_vet,1)}g vet\n")
+    print(f"\nTotaal: {round(totaal_kcal,1)} kcal | {round(totaal_eiwit,1)}g eiwit | {round(totaal_kh,1)}g kh | {round(totaal_vet,1)}g vet\n")
 
 #Berekenen hoeveelheid beweging functie
 def berekenen_beweging(kcal):
@@ -108,7 +108,7 @@ def berekenen_beweging(kcal):
 #Hoofdmenu met ValueError
 while True:
     try:
-        keuze = int(input("\nKies een optie:\n1. zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Bereken beweging voor vandaag\n4. Stop\n"))
+        keuze = int(input("\nKies een optie:\n1. Zoeken en opslaan voeding\n2. Toon dagoverzicht\n3. Bereken beweging voor vandaag\n4. Stop\n"))
         if keuze == 1:
             zoekterm = input("Voer een productnaam in: ")
             zoekfunctie(zoekterm)
