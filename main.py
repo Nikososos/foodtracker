@@ -103,7 +103,21 @@ def berekenen_beweging(kcal):
     except ValueError:
         print("Ongeldige invoer!!!")
         return
+    
+    activiteiten = ["running", "cycling", "walking"]
+    print("beweging om je calorieën te verbranden")
+    for activiteit in activiteiten:
+        response = requests.get(
+            base_url,
+            headers={"X-Api-Key": API_KEY},
+            params={"type": "cardio", "name": activiteit}
+        )
 
+    if response.status_code == 200:
+        data = response.json
+        print("API gevonden!!")
+    else:
+        print("API fout", response.status_code)
 
 #Hoofdmenu met ValueError
 while True:
