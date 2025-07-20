@@ -93,22 +93,31 @@ def toon_dagoverzicht():
 
     print(f"\nTotaal: {round(totaal_kcal,1)} kcal | {round(totaal_eiwit,1)}g eiwit | {round(totaal_kh,1)}g kh | {round(totaal_vet,1)}g vet\n")
 
-    return totaal_kcal #Geeft het totaal door aan de berekenen beweging functie
+    return float(totaal_kcal) #Geeft het totaal door aan de berekenen beweging functie
 
-#Functie om kcal per uur op te halen
-def get_kcal_per_uur(activiteit, gewicht, duur):
-    response = requests.get(
-            base_url,
-            headers={"X-Api-Key": API_KEY},
-            params={"activity": activiteit,
-                    "weight": gewicht,
-                    "duration": duur,
-                }
-        )
-    
-    data = response.json()
-    if not data:
+# Functie om kcal per uur op te halen
+def get_kcal_per_uur(activiteit: str, gewicht_kg: float, duur: int = 60):
+
+    # omzetten van kg naar lbs
+    gewicht_lbs = float(gewicht_kg * 2.20462)
+
+    headers={"X-Api-Key": API_KEY}
+    params={
+        "activity": activiteit,
+        "weight": gewicht_lbs,
+        "duration": duur,
+    }
+
+    try:
+        response = requests.get(base_url, headers=headers, params=params)
+    except requests.RequestException:
+        print(f"Api fout voor {activiteit}")
         return None
+    
+    try:
+        data = response.json()
+    except ValueError:
+        print(f"Ongeldige Json voor {activiteit}")
     
     item = data[0]
     # Het ophalen van calorieén per uur
@@ -117,6 +126,7 @@ def get_kcal_per_uur(activiteit, gewicht, duur):
             return float(item["calories_per_hour"])
         except (TypeError, ValueError):
             pass
+    
     # Het ophalen van totale calorieén 
     if "total_calories" in item:
         try:
@@ -130,22 +140,25 @@ def berekenen_beweging(kcal):
     if kcal == 0:
         print("Geen calorieën om te verbranden")
         return
-    
+    #Input vragen gebruiker voor gewicht
     try:
-        gewicht = float(input("Wat is je gewicht in kg?: "))
+        gewicht_kg = float(input("Wat is je gewicht in kg?: "))
     except ValueError:
         print("Ongeldige invoer!!!")
         return
     
     activiteiten = ["running", "cycling", "walking"]
-
-    print("\nbeweging om je calorieën te verbranden")
+    #Door de activiteiten lijst heen gaan om per activiteit het aantal benodigde minuten om de kcal te verbranden uit te rekenen
+    print("\nBeweging om je calorieën te verbranden")
     for activiteit in activiteiten:
-        kcal_per_uur = get_kcal_per_uur(activiteit, gewicht, duur=60)
+        kcal_per_uur = get_kcal_per_uur(activiteit, gewicht_kg, duur=60)
         if not kcal_per_uur or kcal_per_uur <= 0:
             print(f"- {activiteit.title()}: geen data.")
+            continue
     
-        minuten = round((float(kcal) / float(kcal_per_uur)) * 60)
+        minuten = round(((kcal) / (kcal_per_uur)) * 60)
+        if minuten < 0:
+            minuten = 0
         print(f"- {activiteit.title()}: {minuten} min")
         
 
