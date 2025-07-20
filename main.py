@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
-base_url = "https://api.api-ninjas.com/v1/exercises"
+base_url = "https://api.api-ninjas.com/v1/caloriesburned"
 
 # Lege lijst voor het opslaan van voeding buiten de scope van de functie
 opgeslagen_voeding = []
@@ -93,10 +93,42 @@ def toon_dagoverzicht():
 
     print(f"\nTotaal: {round(totaal_kcal,1)} kcal | {round(totaal_eiwit,1)}g eiwit | {round(totaal_kh,1)}g kh | {round(totaal_vet,1)}g vet\n")
 
+    return totaal_kcal #Geeft het totaal door aan de berekenen beweging functie
+
+#Functie om kcal per uur op te halen
+def get_kcal_per_uur(activiteit, gewicht, duur):
+    response = requests.get(
+            base_url,
+            headers={"X-Api-Key": API_KEY},
+            params={"activity": activiteit,
+                    "weight": gewicht,
+                    "duration": duur,
+                }
+        )
+    
+    data = response.json()
+    if not data:
+        return None
+    
+    item = data[0]
+    # Het ophalen van calorieén per uur
+    if "calories_per_hour" in item:
+        try:
+            return float(item["calories_per_hour"])
+        except (TypeError, ValueError):
+            pass
+    # Het ophalen van totale calorieén 
+    if "total_calories" in item:
+        try:
+            totaal = float(item["total_calories"])
+            return (totaal / duur) * 60
+        except (TypeError, ValueError):
+            pass
+
 #Berekenen hoeveelheid beweging functie
 def berekenen_beweging(kcal):
     if kcal == 0:
-        print("Geen calorieën ingevoerd")
+        print("Geen calorieën om te verbranden")
         return
     
     try:
@@ -106,25 +138,16 @@ def berekenen_beweging(kcal):
         return
     
     activiteiten = ["running", "cycling", "walking"]
-    print("beweging om je calorieën te verbranden")
-    for activiteit in activiteiten:
-        response = requests.get(
-            base_url,
-            headers={"X-Api-Key": API_KEY},
-            params={"type": "cardio", "name": activiteit}
-        )
 
-    if response.status_code == 200:
-        data = response.json()
-        print("API gevonden!!")
-        if data:
-            kcal_per_uur = data[0]["calories_per_hour"] * (gewicht / 70) # Ervan uitgaande dat de gemiddelde mens 70 kilo weegt om factor uit te rekenen
-            minuten = round((kcal / kcal_per_uur) * 60)
-            print(f"{activiteit.title()}: {minuten} minuten")
-        else:
-            print(f"Geen data voor {activiteit}")
-    else:
-        print("API fout", response.status_code)
+    print("\nbeweging om je calorieën te verbranden")
+    for activiteit in activiteiten:
+        kcal_per_uur = get_kcal_per_uur(activiteit, gewicht, duur=60)
+        if not kcal_per_uur or kcal_per_uur <= 0:
+            print(f"- {activiteit.title()}: geen data.")
+    
+        minuten = round((float(kcal) / float(kcal_per_uur)) * 60)
+        print(f"- {activiteit.title()}: {minuten} min")
+        
 
 #Hoofdmenu met ValueError
 while True:
